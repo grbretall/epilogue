@@ -76,7 +76,6 @@ public class Arrow_Spawner : MonoBehaviour {
             {
                 if (am.spawnTime == Time.time)
                 {
-                    Debug.Log("T");
                     am.GetComponentInParent<SpriteRenderer>().enabled = true;
                     am.moving = true;
                 }
