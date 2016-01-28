@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Arrow_Movement : MonoBehaviour
 {
-    public float speed = 2;
+    public float speed = 5;
     public float spawnTime = 0;
     public bool moving = false;
     public enum arrowType {UP, DOWN, LEFT, RIGHT};
@@ -19,7 +19,7 @@ public class Arrow_Movement : MonoBehaviour
     private float leftPressedTime = 0;
     private float downPressedTime = 0;
     private float rightPressedTime = 0;
-    private float holdButtonTime = 0.2f;
+    private float holdButtonTime = 10f;
 
     public Vector3 leftArrowDest = new Vector3(-18, 1.7f, 0);
     public Vector3 rightArrowDest = new Vector3(-18, -4f, 0);
@@ -75,10 +75,12 @@ public class Arrow_Movement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag.Equals("PerfectHitZone"))
+        //Debug.Log("Collider Entered");
+        if (other.tag.Equals("Perfect_Hit_Zone"))
         {
             if(dir == arrowType.UP && upPressed)
             {
+                Debug.Log("PerfectHit");       
                 performHit(3, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
@@ -94,10 +96,11 @@ public class Arrow_Movement : MonoBehaviour
                 performHit(3, .04);
             }
         }
-        if(other.tag.Equals("NearHitZone"))
+        if(other.tag.Equals("Near_Hit_Zone"))
         {
             if (dir == arrowType.UP && upPressed)
             {
+                Debug.Log("Near Hit");
                 performHit(2, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
@@ -115,6 +118,7 @@ public class Arrow_Movement : MonoBehaviour
         }
         if(other.tag.Equals("MissZone"))
         {
+            Debug.Log("Miss");
             GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().resetRhythmGameCombo();
             GameObject.Destroy(this.gameObject);
         }

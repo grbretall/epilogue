@@ -5,8 +5,17 @@ using System.IO;
 
 public class Arrow_Spawner : MonoBehaviour {
 
+    public Transform UpArrow;
+    public Transform LeftArrow;
+    public Transform DownArrow;
+    public Transform RightArrow;
+
+    public Vector3 upArrowDest = new Vector3(-38, 3.5f, 0);
+    public Vector3 leftArrowDest = new Vector3(-38, 1f, 0);
+    public Vector3 downArrowDest = new Vector3(-38, -1, 0);
+    public Vector3 rightArrowDest = new Vector3(-38, -4, 0);
+
     public string fileName = "ExampleLevelArrow";
-    public Transform Arrow_Template;
     public TextAsset myFile;
     char[] delimiters = { ' ', '\n' };
     
@@ -18,7 +27,7 @@ public class Arrow_Spawner : MonoBehaviour {
         string[] arrow_params;
         float currentSpawnTime = 0;
         float currentSpeed = 0;
-        int currentDir = 0;
+        Arrow_Movement.arrowType currentDir = Arrow_Movement.arrowType.UP;
         try
         {
             //TextAsset myFile = (TextAsset)Resources.Load(fileName, typeof(TextAsset));
@@ -35,20 +44,19 @@ public class Arrow_Spawner : MonoBehaviour {
                     }
                     else
                     {
-                        currentDir = int.Parse(arrow_params[i]);
-                        switch (currentDir)
+                        switch (int.Parse(arrow_params[i]))
                         {
                             case 1:
-                                Instantiate(Arrow_Template).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.UP, new Vector3(-38,3.5f,0));
+                                Instantiate(UpArrow).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.UP, upArrowDest);
                                 break;
                             case 2:
-                                Instantiate(Arrow_Template).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.LEFT, new Vector3(-38, 1f, 0));
+                                Instantiate(LeftArrow).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.LEFT, leftArrowDest);
                                 break;
                             case 3:
-                                Instantiate(Arrow_Template).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.DOWN, new Vector3(-38, -1, 0));
+                                Instantiate(DownArrow).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.DOWN, downArrowDest);
                                 break;
                             default:
-                                Instantiate(Arrow_Template).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.RIGHT, new Vector3(-38, -4, 0));
+                                Instantiate(RightArrow).GetComponent<Arrow_Movement>().Initialize(currentSpeed, currentSpawnTime, Arrow_Movement.arrowType.RIGHT, rightArrowDest);
                                 break;
                         }
                         currentSpawnTime = 0;

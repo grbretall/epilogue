@@ -9,8 +9,14 @@ public class Projectile_Spawner : MonoBehaviour
     public int numWaves = 2;    //The number of times at which projectiles spawn
     public int currentWave = 0; //Stores what the current spawning wave is
     */
+    public Transform Projectile1;
+    public Transform Projectile2;
+    public Transform Projectile3;
+    public Transform Projectile4;
+    public Transform Projectile5;
+    public Transform Projectile6;
+
     public string fileName = "ExampleLevelProj";
-    public Transform Projectile_Template;
     char[] delimiters = { ' ', '\n' };
     public TextAsset myFile;
 
@@ -20,60 +26,86 @@ public class Projectile_Spawner : MonoBehaviour
     public float rightBorder = 2;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        
+
         string[] projectile_params;
         float currentSpawnTime = 0;
         float currentSpeed = 0;
         float currentStartPos = 0;
-        int currentDir = 0;
+        Vector3 currentStartVector = Vector3.zero;
+        EnemyController.direction currentDir = EnemyController.direction.UP;
         try
         {
             //TextAsset myFile = (TextAsset)Resources.Load(fileName, typeof(TextAsset));
             projectile_params = myFile.text.Split(delimiters);
-                for (int i = 0; i < projectile_params.Length; i++)
+            for (int i = 0; i < projectile_params.Length; i++)
+            {
+                if (i % 5 == 0)
                 {
-                    if (i % 4 == 0)
+                    currentSpeed = float.Parse(projectile_params[i]);
+                }
+                else if (i % 5 == 1)
+                {
+                    currentSpawnTime = float.Parse(projectile_params[i]);
+                }
+                else if (i % 5 == 2)
+                {
+                    currentStartPos = float.Parse(projectile_params[i]);
+                }
+                else if (i % 5 == 3)
+                {
+                    switch (int.Parse(projectile_params[i]))
                     {
-                        currentSpeed = float.Parse(projectile_params[i]);
-                    }
-                    else if (i % 4 == 1)
-                    {
-                        currentSpawnTime = float.Parse(projectile_params[i]);
-                    }
-                    else if(i % 4 == 2)
-                    {
-                        currentStartPos = float.Parse(projectile_params[i]);
-                    }
-                    else
-                    {
-                        currentDir = int.Parse(projectile_params[i]);
-                        switch (currentDir)
-                        {
-                            case 1:
-                                Instantiate(Projectile_Template).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, EnemyController.direction.UP, 
-                                    new Vector3(currentStartPos, upBorder, 0));
-                                break;
-                            case 2:
-                                Instantiate(Projectile_Template).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, EnemyController.direction.LEFT, 
-                                    new Vector3(leftBorder, currentStartPos, 0));
-                                break;
-                            case 3:
-                                Instantiate(Projectile_Template).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, EnemyController.direction.DOWN, 
-                                    new Vector3(currentStartPos, downBorder, 0));
-                                break;
-                            default:
-                                Instantiate(Projectile_Template).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, EnemyController.direction.RIGHT, 
-                                    new Vector3(rightBorder, currentStartPos, 0));
-                                break;
-                        }
-                        currentSpawnTime = 0;
-                        currentSpeed = 0;
-                        currentDir = 0;
-                    }
+                        case 1:
+                            currentDir = EnemyController.direction.UP;
+                            currentStartVector = new Vector3(currentStartPos, upBorder, 0);
+                            break;
+                        case 2:
+                            currentDir = EnemyController.direction.LEFT;
+                            currentStartVector = new Vector3(leftBorder, currentStartPos, 0);
+                            break;
+                        case 3:
+                            currentDir = EnemyController.direction.DOWN;
+                            currentStartVector = new Vector3(currentStartPos, downBorder, 0);
+                            break;
+                        default:
+                            currentDir = EnemyController.direction.RIGHT;
+                            currentStartVector = new Vector3(rightBorder, currentStartPos, 0);
+                            break;
 
-                
+                    }
+                }
+                else
+                {
+                    switch (int.Parse(projectile_params[i]))
+                    {
+                        case 1:
+                            Instantiate(Projectile1).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                        case 2:
+                            Instantiate(Projectile2).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                        case 3:
+                            Instantiate(Projectile3).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                        case 4:
+                            Instantiate(Projectile4).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                        case 5:
+                            Instantiate(Projectile5).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                        default:
+                            Instantiate(Projectile6).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            break;
+                    }
+                    currentSpawnTime = 0;
+                    currentSpeed = 0;
+                    currentStartPos = 0;
+                    currentStartVector = Vector3.zero;
+                }
+
+
             }
         }
         catch (System.Exception e)
@@ -82,12 +114,12 @@ public class Projectile_Spawner : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-	
-	}
+
+    }
 
     void FixedUpdate()
     {
@@ -96,7 +128,7 @@ public class Projectile_Spawner : MonoBehaviour
         {
             if (ec.GetComponentInParent<SpriteRenderer>().enabled == false)
             {
-                if(ec.spawnTime == Time.time)
+                if (ec.spawnTime == Time.time)
                 {
                     ec.GetComponentInParent<SpriteRenderer>().enabled = true;
                     ec.moving = true;
