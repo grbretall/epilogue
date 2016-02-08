@@ -20,58 +20,134 @@ public class Projectile_Spawner : MonoBehaviour
     char[] delimiters = { ' ', '\n' };
     public TextAsset myFile;
 
-    public float upBorder = 2;
-    public float leftBorder = -2;
-    public float downBorder = -2;
-    public float rightBorder = 2;
+    public float[] waveTimes;
+    public int currentWave = 0;
+    public bool primaryWaveChoice = true;
+    public TextAsset wave1File;
+    public TextAsset wave2FileA;
+    public TextAsset wave2FileB;
+    public TextAsset wave3FileA;
+    public TextAsset wave3FileB;
+
+    public float upBorder = 7;
+    public float leftBorder = -7;
+    public float downBorder = -7;
+    public float rightBorder = 7;
 
     // Use this for initialization
     void Start()
     {
+        parseFile();
+        waveTimes = new float[1];
+        waveTimes[0] = .2f;
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    void FixedUpdate()
+    {
+        checkWave();
+        EnemyController[] projectiles = FindObjectsOfType<EnemyController>();
+        foreach (EnemyController ec in projectiles)
+        {
+            
+            if (ec.GetComponentInParent<SpriteRenderer>().enabled == false)
+            {
+                
+                if (ec.spawnTime == Time.time)
+                {
+                    Debug.Log("We're in the spawn checkin loop");
+                    ec.GetComponentInParent<SpriteRenderer>().enabled = true;
+                    ec.moving = true;
+                }
+            }
+        }
+    }
+
+    void checkWave()
+    {
+        if (currentWave < waveTimes.Length)
+        {
+            if (waveTimes[currentWave] == Time.time)
+            {
+                if (primaryWaveChoice)
+                {
+                    switch (currentWave)
+                    {
+                        case 0:
+                            myFile = wave2FileA;
+                            break;
+                        case 1:
+                            myFile = wave3FileA;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (currentWave)
+                    {
+                        case 0:
+                            myFile = wave2FileB;
+                            break;
+                        case 1:
+                            myFile = wave3FileB;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                currentWave++;
+                parseFile();
+            }
+        }
+    }
+
+    void parseFile()
+    {
         string[] projectile_params;
-        float currentSpawnTime = 0;
-        float currentSpeed = 0;
-        float currentStartPos = 0;
+        double currentSpawnTime = 0;
+        double currentSpeed = 0;
+        double currentStartPos = 0;
         Vector3 currentStartVector = Vector3.zero;
         EnemyController.direction currentDir = EnemyController.direction.UP;
         try
         {
-            //TextAsset myFile = (TextAsset)Resources.Load(fileName, typeof(TextAsset));
             projectile_params = myFile.text.Split(delimiters);
             for (int i = 0; i < projectile_params.Length; i++)
             {
                 if (i % 5 == 0)
                 {
-                    currentSpeed = float.Parse(projectile_params[i]);
+                    currentSpeed = double.Parse(projectile_params[i]);
                 }
                 else if (i % 5 == 1)
                 {
-                    currentSpawnTime = float.Parse(projectile_params[i]);
+                    currentSpawnTime = double.Parse(projectile_params[i]);
                 }
                 else if (i % 5 == 2)
                 {
-                    currentStartPos = float.Parse(projectile_params[i]);
+                    currentStartPos = double.Parse(projectile_params[i]);
                 }
                 else if (i % 5 == 3)
                 {
                     switch (int.Parse(projectile_params[i]))
                     {
                         case 1:
-                            currentDir = EnemyController.direction.UP;
-                            currentStartVector = new Vector3(currentStartPos, upBorder, 0);
+                            currentStartVector = new Vector3((float)currentStartPos, upBorder, 0);
                             break;
                         case 2:
-                            currentDir = EnemyController.direction.LEFT;
-                            currentStartVector = new Vector3(leftBorder, currentStartPos, 0);
+                            currentStartVector = new Vector3(leftBorder, (float)currentStartPos, 0);
                             break;
                         case 3:
-                            currentDir = EnemyController.direction.DOWN;
-                            currentStartVector = new Vector3(currentStartPos, downBorder, 0);
+                            currentStartVector = new Vector3((float)currentStartPos, downBorder, 0);
                             break;
                         default:
-                            currentDir = EnemyController.direction.RIGHT;
-                            currentStartVector = new Vector3(rightBorder, currentStartPos, 0);
+                            currentStartVector = new Vector3(rightBorder, (float)currentStartPos, 0);
                             break;
 
                     }
@@ -81,22 +157,23 @@ public class Projectile_Spawner : MonoBehaviour
                     switch (int.Parse(projectile_params[i]))
                     {
                         case 1:
-                            Instantiate(Projectile1).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Debug.Log("We're instantiating");
+                            Instantiate(Projectile1).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 2:
-                            Instantiate(Projectile2).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Instantiate(Projectile2).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 3:
-                            Instantiate(Projectile3).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Instantiate(Projectile3).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 4:
-                            Instantiate(Projectile4).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Instantiate(Projectile4).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 5:
-                            Instantiate(Projectile5).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Instantiate(Projectile5).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         default:
-                            Instantiate(Projectile6).GetComponent<EnemyController>().Initialize(currentSpeed, currentSpawnTime, currentDir, currentStartVector);
+                            Instantiate(Projectile6).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                     }
                     currentSpawnTime = 0;
@@ -113,43 +190,5 @@ public class Projectile_Spawner : MonoBehaviour
             Debug.Log("File Couldn't be read");
             Debug.Log(e.Message);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void FixedUpdate()
-    {
-        EnemyController[] projectiles = FindObjectsOfType<EnemyController>();
-        foreach (EnemyController ec in projectiles)
-        {
-            if (ec.GetComponentInParent<SpriteRenderer>().enabled == false)
-            {
-                if (ec.spawnTime == Time.time)
-                {
-                    ec.GetComponentInParent<SpriteRenderer>().enabled = true;
-                    ec.moving = true;
-                }
-            }
-        }
-        /*if( Time.time == waveTimes[currentWave])
-        {
-            SpriteRenderer[] sprites = FindObjectsOfType<SpriteRenderer>();
-            foreach(SpriteRenderer sr in sprites)
-            {
-                if(sr.tag.Equals("Projectile"))
-                {
-                    if(!sr.enabled && sr.GetComponentInParent<EnemyController>().spawnTime == waveTimes[currentWave])
-                    {
-                        sr.enabled = true;
-                        sr.GetComponentInParent<EnemyController>().moving = true;
-                    }
-                }
-            }
-            currentWave++;
-        }*/
     }
 }
