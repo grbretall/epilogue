@@ -32,9 +32,12 @@ public class MouseManager : MonoBehaviour
 
         if(Input.GetMouseButtonUp(0))                                                                       
         {
-            // If they let up the mouse button, the grabbed object will stop being attached to the mouse
-            grabbedObject.velocity = Vector2.zero;
-            grabbedObject = null;
+            // If they let up the mouse button, the grabbed object will stop being attached to the mouse so long as an object is grabbed
+            if (grabbedObject != null)
+            {
+                grabbedObject.velocity = Vector2.zero;
+                grabbedObject = null;
+            }
         }
         Rotate();
 	}
