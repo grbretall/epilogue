@@ -45,11 +45,10 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
-    public void Initialize(float speed, float spawnTime, direction orientation, Vector3 startPos)
+    public void Initialize(float speed, float spawnTime,Vector3 startPos)
     {
         this.speed = speed;
         this.spawnTime = spawnTime;
-        this.orientation = orientation;
         transform.position = startPos;
     }
 }

@@ -21,10 +21,10 @@ public class Arrow_Movement : MonoBehaviour
     private float rightPressedTime = 0;
     private float holdButtonTime = 10f;
 
-    public Vector3 leftArrowDest = new Vector3(-18, 1.7f, 0);
-    public Vector3 rightArrowDest = new Vector3(-18, -4f, 0);
-    public Vector3 upArrowDest = new Vector3(-18, 3.5f, 0);
-    public Vector3 downArrowDest = new Vector3(-18, -1f, 0);
+    public Vector3 leftArrowDest = new Vector3(-16.5f, 1f, 0);
+    public Vector3 rightArrowDest = new Vector3(-16.5f, -4f, 0);
+    public Vector3 upArrowDest = new Vector3(-16.5f, 3.5f, 0);
+    public Vector3 downArrowDest = new Vector3(-16.5f, -1f, 0);
 
     // Use this for initialization
     void Start ()
@@ -116,7 +116,7 @@ public class Arrow_Movement : MonoBehaviour
                 performHit(2, .04);
             }
         }
-        if(other.tag.Equals("MissZone"))
+        if(other.tag.Equals("Miss_Zone"))
         {
             Debug.Log("Miss");
             GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().resetRhythmGameCombo();
