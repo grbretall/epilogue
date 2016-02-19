@@ -6,7 +6,6 @@ public class StdOffenseEnemy : MonoBehaviour
     public bool isMoving = true;
     public float speed = 5;
     public float spawnTime = 0;
-    public float startPos = 0;
     public Vector3 destPos;
     public Vector3 endZone;
 
@@ -23,19 +22,30 @@ public class StdOffenseEnemy : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        if(destPos.Equals(Vector3.zero))
-        {
-            destPos = endZone;
-        }
-        else if(transform.position.Equals(destPos))
+        if(transform.position.Equals(destPos))
         {
             currentNode++;
-            destPos = nodeList[enemyRoute[currentNode]];
+            if (nodeList[enemyRoute[currentNode]].Equals(Vector3.zero))
+            {
+                destPos = endZone;
+            }
+            else
+            {
+                destPos = nodeList[enemyRoute[currentNode]];
+            }
         }
         if (isMoving)
         {
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, destPos, step);
         }
+    }
+
+    public void Initialize(float speed, float spawnTime, Vector3 startPos, int[] enemyRoute)
+    {
+        this.speed = speed;
+        this.spawnTime = spawnTime;
+        transform.position = startPos;
+        this.enemyRoute = enemyRoute;
     }
 }
