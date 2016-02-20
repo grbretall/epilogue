@@ -8,9 +8,19 @@ public class MouseManager : MonoBehaviour
     Vector2 origPos2D = new Vector2(0, 0);
     float dragSpeed = 10f;
 
+    public Transform nonLethalAttack;
+    public bool cooldown = false;
+    public float cooldownDuration = 2.0f;
+    public float cooldownStartTime = 0;
+
 	// Update is called once per frame
 	void Update ()
     {
+        if((Time.time - cooldownStartTime) >= cooldownDuration)
+        {
+            cooldown = false;
+            cooldownStartTime = 0;
+        }
 	    if(Input.GetMouseButtonDown(0))
         {
             Vector3 mouseWorldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -27,6 +37,12 @@ public class MouseManager : MonoBehaviour
 
                     grabbedObject = hit.collider.GetComponent<Rigidbody2D>(); //We set grabbedObject equal to the valid thing we've clicked on
                 }
+                else if (hit.collider.GetComponent<Rigidbody2D>() != null && hit.collider.tag.Equals("Enemy"))
+                {
+                    //What we hit has a rigibody and has the enemy tag
+
+                    hit.collider.GetComponent<StdOffenseEnemy>().dealDamage(); ;
+                }
             }
         }
 
@@ -39,6 +55,25 @@ public class MouseManager : MonoBehaviour
                 grabbedObject = null;
             }
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 mouseWorldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos2D = new Vector2(mouseWorldPos3D.x, mouseWorldPos3D.y);
+            Vector2 dir = Vector2.zero;
+
+            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, dir);
+            if (hit != null && hit.collider != null)
+            {
+                if (hit.collider.GetComponent<Rigidbody2D>() != null && hit.collider.tag.Equals("OffenseGameBackground") && !cooldown)
+                {
+                    Instantiate(nonLethalAttack, mouseWorldPos3D, Quaternion.Euler(0, 180, 0));
+                    cooldown = true;
+                    cooldownStartTime = Time.time;
+                }
+            }
+        }
+
         Rotate();
 	}
 

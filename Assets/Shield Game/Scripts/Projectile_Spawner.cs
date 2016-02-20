@@ -60,7 +60,7 @@ public class Projectile_Spawner : MonoBehaviour
                 
                 if (ec.spawnTime == Time.time)
                 {
-                    Debug.Log("We're in the spawn checkin loop");
+                    //Debug.Log("We're in the spawn checkin loop");
                     ec.GetComponentInParent<SpriteRenderer>().enabled = true;
                     ec.moving = true;
                 }
@@ -157,7 +157,7 @@ public class Projectile_Spawner : MonoBehaviour
                     switch (int.Parse(projectile_params[i]))
                     {
                         case 1:
-                            Debug.Log("We're instantiating");
+                            //Debug.Log("We're instantiating");
                             Instantiate(Projectile1).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 2:

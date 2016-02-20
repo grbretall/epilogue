@@ -80,7 +80,7 @@ public class Arrow_Movement : MonoBehaviour
         {
             if(dir == arrowType.UP && upPressed)
             {
-                Debug.Log("PerfectHit");       
+                //Debug.Log("PerfectHit");       
                 performHit(3, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
@@ -100,7 +100,7 @@ public class Arrow_Movement : MonoBehaviour
         {
             if (dir == arrowType.UP && upPressed)
             {
-                Debug.Log("Near Hit");
+                //Debug.Log("Near Hit");
                 performHit(2, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
@@ -118,7 +118,7 @@ public class Arrow_Movement : MonoBehaviour
         }
         if(other.tag.Equals("Miss_Zone"))
         {
-            Debug.Log("Miss");
+            //Debug.Log("Miss");
             GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().resetRhythmGameCombo();
             GameObject.Destroy(this.gameObject);
         }
