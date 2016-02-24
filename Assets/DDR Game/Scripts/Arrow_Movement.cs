@@ -3,24 +3,29 @@ using System.Collections;
 
 public class Arrow_Movement : MonoBehaviour
 {
-    public float speed = 5;
-    public float spawnTime = 0;
-    public bool moving = false;
-    public enum arrowType {UP, DOWN, LEFT, RIGHT};
-    public arrowType dir = arrowType.UP;
-    public Vector3 destPos;
+    public float speed = 5;                         //How fast the arrow will move
+    public float spawnTime = 0;                     //What time in seconds that the arrow will spawn
+    public bool moving = false;                     //Whether or not the arrow is currently moving
+    public enum arrowType {UP, DOWN, LEFT, RIGHT};  //A type for arrow directions
+    public arrowType dir;                           //The arrow's set direction (up, down, left or right)
+    public Vector3 destPos;                         //The destination position of a specific arrow
 
+    //Boolean values to check if a certain arrow is pressed
     public bool upPressed = false;
     private bool leftPressed = false;
     private bool downPressed = false;
     private bool rightPressed = false;
 
+    //Tracks what time the key is first pressed
     private float upPressedTime = 0;
     private float leftPressedTime = 0;
     private float downPressedTime = 0;
     private float rightPressedTime = 0;
-    private float holdButtonTime = 10f;
 
+    //Tracks how long the key press will last for
+    public float holdButtonTime = 1f;
+
+    //Position vector for where each arrow will be heading toward (the miss zone)
     public Vector3 leftArrowDest = new Vector3(-16.5f, 1f, 0);
     public Vector3 rightArrowDest = new Vector3(-16.5f, -4f, 0);
     public Vector3 upArrowDest = new Vector3(-16.5f, 3.5f, 0);
@@ -29,8 +34,11 @@ public class Arrow_Movement : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        //Start the arrow as invisible and not moving
         GetComponentInParent<SpriteRenderer>().enabled = false;
+        moving = false;
 
+        //Sets this arrow's destPos to the correct destination zone for its direction
         switch (dir)
         {
             case arrowType.UP:
@@ -52,6 +60,7 @@ public class Arrow_Movement : MonoBehaviour
     
 	}
 
+    //The function used to intiialize an arrow when it's created.  Sets speed, spawn time, direction, and starting position
     public void Initialize(float speed, float spawnTime, arrowType dir, Vector3 startPos)
     {
         this.speed = speed;
@@ -63,9 +72,10 @@ public class Arrow_Movement : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        checkButtonPress();
-        checkButtonPressExpiration();
+        checkButtonPress();             //Checks to see if the relevant arrow key to this arrow is being pressed
+        checkButtonPressExpiration();   //Checks if the current arrow key press has expired
         
+        //If moving is true, the arrow will move towards the destPos vector in a straight line
         if (moving)
         {
             float step = speed * Time.deltaTime;
@@ -75,12 +85,11 @@ public class Arrow_Movement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log("Collider Entered");
+        //Checks for collision in the perfect hit zone
         if (other.tag.Equals("Perfect_Hit_Zone"))
         {
             if(dir == arrowType.UP && upPressed)
-            {
-                //Debug.Log("PerfectHit");       
+            {    
                 performHit(3, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
@@ -96,6 +105,7 @@ public class Arrow_Movement : MonoBehaviour
                 performHit(3, .04);
             }
         }
+        //Checks for collision in the near hit zone (the area to the left of the perfect hit zone
         if(other.tag.Equals("Near_Hit_Zone"))
         {
             if (dir == arrowType.UP && upPressed)
@@ -116,6 +126,7 @@ public class Arrow_Movement : MonoBehaviour
                 performHit(2, .04);
             }
         }
+        //Checks for a miss and resets the combo
         if(other.tag.Equals("Miss_Zone"))
         {
             //Debug.Log("Miss");
@@ -124,12 +135,14 @@ public class Arrow_Movement : MonoBehaviour
         }
     }
 
+    //Records the point value and combo increase for a hit
     private void performHit(int scoreMod, double comboMod)
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateRhythmGameScore(scoreMod, comboMod);
         GameObject.Destroy(this.gameObject);
     }
 
+    //Checks to see if the relevant arrow key to this arrow is being pressed
     private void checkButtonPress()
     {
         if (Input.GetButtonDown("UpArrow"))
@@ -154,6 +167,7 @@ public class Arrow_Movement : MonoBehaviour
         }
     }
 
+    //Checks if the current arrow key press has expired
     private void checkButtonPressExpiration()
     {
         if (Time.time - upPressedTime > holdButtonTime)

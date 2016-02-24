@@ -1,0 +1,10 @@
+Rhythm Game Level File Template
+==================================================
+The format for the rhythm game is as follows:
+
+Speed SpawnTime Direction
+
+==================================================
+Speed : a whole number that will determine speed (the parser doesn't like decimals)
+Spawn Time : the time in seconds the prefab will spawn at, decimals seem to work here for whatever reason
+Direction : a number between 1 and 4 to determine direction (1 is UP, 2 is LEFT, 3 is DOWN, and 4 is RIGHT )

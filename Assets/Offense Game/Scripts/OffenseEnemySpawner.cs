@@ -42,7 +42,11 @@ public class OffenseEnemySpawner : MonoBehaviour {
     {
         checkWave();
         StdOffenseEnemy[] enemies = FindObjectsOfType<StdOffenseEnemy>();
-        foreach(StdOffenseEnemy enemy in enemies)
+        //Checks all StdOffenseEnemy prefabs currently in the scene and checks
+        //if it's their spawn time, their sprite renderer is off,
+        //and they aren't moving.
+        //If these conditions are met, the sprite renderer is turned on and moving is set to true;
+        foreach (StdOffenseEnemy enemy in enemies)
         {
             if (enemy.GetComponentInParent<SpriteRenderer>().enabled == false)
             {
@@ -55,6 +59,9 @@ public class OffenseEnemySpawner : MonoBehaviour {
         }
     }
 
+    //Checks if there is a new wave
+    //If there is, then the proper wave file is set as myFile and the new file
+    //is subsequently parsed
     void checkWave()
     {
         if (currentWave < waveTimes.Length)
@@ -97,16 +104,16 @@ public class OffenseEnemySpawner : MonoBehaviour {
 
     void parseFile()
     {
-        string[] offense_params;
-        double currentSpawnTime = 0;
-        double currentSpeed = 0;
-        int currentDamage = 0;
-        int currentHealth = 0;
-        bool currentCivilian = false;
-        bool currentResistant = false;
-        int[] currentEnemyRoute = new int[10];
-        int enemyRouteCounter = 0;
-        Vector3 currentStartVector = Vector3.zero;
+        string[] offense_params;                    //Stores all the strings from the level file
+        double currentSpawnTime = 0;                //Stores the spawn time of the current enemy
+        double currentSpeed = 0;                    //Stores the speed of the current enemy
+        int currentDamage = 0;                      //Stores the damage of the current enemy
+        int currentHealth = 0;                      //Stores the health of the current enemy
+        bool currentCivilian = false;               //Stores the civilian status of the current enemy
+        bool currentResistant = false;              //Stores the resistance status of the current enemy
+        int[] currentEnemyRoute = new int[10];      //Stores the node route for the current enemy (indexes for the full node list)
+        int enemyRouteCounter = 0;                  //Stores our position in currentEnemyRoute
+        Vector3 currentStartVector = Vector3.zero;  //Stores the vector of where our current enemy will be instantiated
 
         try
         {

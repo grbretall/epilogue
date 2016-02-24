@@ -1,0 +1,17 @@
+Offense Game Level File Template
+======================================
+The format for the offense game is as follows:
+
+speed spawnTime damage health civilian resistant startPosition route1 route2 route3 route4 route5 route6 route7 route8 route9 route10 spriteNum
+
+======================================
+Speed : Speed is a whole number to determine how fast the enemy will move
+Spawn Time : The time at which this enemy will spawn in seconds (decimals supported)
+Damage : A whole number for how much damage the enemy will deal when it reaches the end zone
+Health : A whole number for how much damage this enemy must receive before it is destroyed
+Civilian : Marks whether or not this particular enemy is a civilian or not.  1 indicates civilian, 0 is not.
+Resistant : Marks if an enemy is resistant to non-lethal damage or not.  1 indicates resistant, 0 indicates 0 not resistant.
+Start Position : The position on the top border that the enemy will spawn. Should be a whole number between -9 and 9
+Routes 1-10 : These are the different nodes that the enemy will travel between.  Nodes are in rows of 10, from left to right
+			  starting at 0.  Any nodes in the 10 node route are not used should be set to 50, as well as one node being preserved at the end as 50.
+Sprite Num : The number of sprite to load in to use for that particular enemy.

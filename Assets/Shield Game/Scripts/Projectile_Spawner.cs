@@ -4,11 +4,7 @@ using System.IO;
 
 public class Projectile_Spawner : MonoBehaviour
 {
-
-    /*public float[] waveTimes;   //Stores all the times at which projectiles spawn
-    public int numWaves = 2;    //The number of times at which projectiles spawn
-    public int currentWave = 0; //Stores what the current spawning wave is
-    */
+    //Where all the different prefabs for projectiles are stored
     public Transform Projectile1;
     public Transform Projectile2;
     public Transform Projectile3;
@@ -20,10 +16,10 @@ public class Projectile_Spawner : MonoBehaviour
     char[] delimiters = { ' ', '\n' };
     public TextAsset myFile;
 
-    public float[] waveTimes;
-    public int currentWave = 0;
-    public bool primaryWaveChoice = true;
-    public TextAsset wave1File;
+    public float[] waveTimes;               //Tracks the times are which various waves are decided
+    public int currentWave = 0;             //The current index in the waveTimes array
+    public bool primaryWaveChoice = true;   //Indicates whether or not you are on the A or B wave (true is A, false is B)
+    public TextAsset wave1File;             //The various different files to be loaded for each wave
     public TextAsset wave2FileA;
     public TextAsset wave2FileB;
     public TextAsset wave3FileA;
@@ -50,8 +46,12 @@ public class Projectile_Spawner : MonoBehaviour
 
     void FixedUpdate()
     {
-        checkWave();
+        checkWave();                                                            //Checks if a new wave has occurred
         EnemyController[] projectiles = FindObjectsOfType<EnemyController>();
+        //Checks all enemycontroller prefabs currently in the scene and checks
+        //if it's their spawn time, their sprite renderer is off,
+        //and they aren't moving.
+        //If these conditions are met, the sprite renderer is turned on and moving is set to true;
         foreach (EnemyController ec in projectiles)
         {
             
@@ -60,7 +60,6 @@ public class Projectile_Spawner : MonoBehaviour
                 
                 if (ec.spawnTime == Time.time)
                 {
-                    //Debug.Log("We're in the spawn checkin loop");
                     ec.GetComponentInParent<SpriteRenderer>().enabled = true;
                     ec.moving = true;
                 }
@@ -68,6 +67,9 @@ public class Projectile_Spawner : MonoBehaviour
         }
     }
 
+    //Checks if there is a new wave
+    //If there is, then the proper wave file is set as myFile and the new file
+    //is subsequently parsed
     void checkWave()
     {
         if (currentWave < waveTimes.Length)
@@ -110,12 +112,11 @@ public class Projectile_Spawner : MonoBehaviour
 
     void parseFile()
     {
-        string[] projectile_params;
-        double currentSpawnTime = 0;
-        double currentSpeed = 0;
-        double currentStartPos = 0;
-        Vector3 currentStartVector = Vector3.zero;
-        EnemyController.direction currentDir = EnemyController.direction.UP;
+        string[] projectile_params;                 //Stores all the strings from the level file
+        double currentSpawnTime = 0;                //The spawn time for the current projectile
+        double currentSpeed = 0;                    //The speed of the current projectile
+        double currentStartPos = 0;                 //The position on the border where the projectile will spawn
+        Vector3 currentStartVector = Vector3.zero;  //The current vector for where the projectile will be instantiated
         try
         {
             projectile_params = myFile.text.Split(delimiters);
@@ -157,7 +158,6 @@ public class Projectile_Spawner : MonoBehaviour
                     switch (int.Parse(projectile_params[i]))
                     {
                         case 1:
-                            //Debug.Log("We're instantiating");
                             Instantiate(Projectile1).GetComponent<EnemyController>().Initialize((float)currentSpeed, (float)currentSpawnTime, currentStartVector);
                             break;
                         case 2:
