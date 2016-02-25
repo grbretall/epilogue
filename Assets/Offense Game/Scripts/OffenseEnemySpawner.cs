@@ -30,7 +30,7 @@ public class OffenseEnemySpawner : MonoBehaviour {
     {
         parseFile();
         waveTimes = new float[1];
-        waveTimes[0] = .5f;
+        waveTimes[0] = .2f;
 	}
 	
 	// Update is called once per frame
