@@ -7,17 +7,20 @@ public class WordGameController : MonoBehaviour {
     public float spawnTime;     //The time when the letter will spawn
     public float letterDuration;//How long the letter will last before the next one is moved on to
     public bool currentlyActive = false;
+    public bool keyHeld = false;
 
     float keyStrokePressedTime = 0.0f;
     float keyStrokeHeldTime = 0.0f;
-    float shortLongCommandThreshold = 0.7f;
+    float shortLongCommandThreshold = 1.0f;
     int bufferSize;
     int[] morseCodeBuffer;     //0 indicates an empty array space, 1 indicates short, 2 indicates long
     int[] correctCode;
     int currentBufferPos = 0;
 
+    /*
     float bufferStartTime = 0;
     float bufferTime = 8.0f;
+    */
 
 
     // Use this for initialization
@@ -29,7 +32,6 @@ public class WordGameController : MonoBehaviour {
         {
             morseCodeBuffer[i] = 0;
         }
-        bufferStartTime = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -42,15 +44,19 @@ public class WordGameController : MonoBehaviour {
     {
         if (currentlyActive)
         {
-            if (checkBuffer())
-            {
-                Debug.Log("You did it!");
-                currentlyActive = false;
-                GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateWordGameScore(1);
+            if (bufferFull())
+            { 
+                if (checkBuffer())
+                {
+                    Debug.Log("You did it!");
+                    currentlyActive = false;
+                    GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateWordGameScore(1);
+                }
             }
-            if (Input.GetButtonDown("MorseCode"))
+            if (Input.GetButton("MorseCode") && !keyHeld)
             {
                 keyStrokePressedTime = Time.time;
+                keyHeld = true;
             }
             if (Input.GetButtonUp("MorseCode"))
             {
@@ -67,16 +73,17 @@ public class WordGameController : MonoBehaviour {
                     currentBufferPos++;
                     Debug.Log("Long Command");
                 }
+                keyHeld = false;
             }
-            if(Time.time - bufferStartTime >= bufferTime)
+            if(Input.GetButton("RefreshBuffer") || bufferFull())
             {
-                for(int i = 0; i < morseCodeBuffer.Length; i++)
-                {
-                    morseCodeBuffer[i] = 0;
+                    for (int i = 0; i < morseCodeBuffer.Length; i++)
+                    {
+                        morseCodeBuffer[i] = 0;
+                    }
                     currentBufferPos = 0;
-                }
-                bufferStartTime = Time.time;
-                Debug.Log("Buffer Cleared");
+                    Debug.Log(morseCodeBuffer.Length);
+                    Debug.Log("Buffer Cleared");
             }
         }
     }
@@ -325,5 +332,15 @@ public class WordGameController : MonoBehaviour {
     public void destroy()
     {
         Destroy(this);
+    }
+
+    public bool bufferFull()
+    {
+        for(int i = 0; i < morseCodeBuffer.Length; i++)
+        {
+            if (morseCodeBuffer[i] == 0)
+                return false;
+        }
+        return true;
     }
 }
