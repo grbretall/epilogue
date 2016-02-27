@@ -93,6 +93,7 @@ public class WordGameSpawner : MonoBehaviour
         {
             if (Time.time - letterStartTime >= currentWord.getCurrentChar().letterDuration && currentWord.currentWordPos < currentWord.getWordListSize()-1)
             {
+				Debug.Log("Shifting to new letter");
                 currentWord.setCurrentCharActive(false);
                 currentWord.currentWordPos++;
                 currentWord.setCurrentCharActive(true);

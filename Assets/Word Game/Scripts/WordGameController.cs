@@ -77,6 +77,13 @@ public class WordGameController : MonoBehaviour {
             }
             if(Input.GetButton("RefreshBuffer") || bufferFull())
             {
+				if (checkBuffer())
+                {
+                    Debug.Log("You did it!");
+                    currentlyActive = false;
+                    GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateWordGameScore(1);
+					return;
+                }
                     for (int i = 0; i < morseCodeBuffer.Length; i++)
                     {
                         morseCodeBuffer[i] = 0;
