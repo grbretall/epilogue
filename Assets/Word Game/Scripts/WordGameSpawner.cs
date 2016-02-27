@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class WordGameSpawner : MonoBehaviour
 {
@@ -31,12 +31,17 @@ public class WordGameSpawner : MonoBehaviour
     public Transform letterY;
     public Transform letterZ;
 
+    WordContainer currentWord = new WordContainer();
+
     public Vector3 centerPoint;
     public float characterWidth;
     char[] delimiters = { ' ', '\n' };
 
     char[] currentLetterList = new char[1];
 
+    public float letterStartTime;
+
+    public float[] waveTimes;
     public TextAsset myFile;
     public int currentWave = 0;
     public bool primaryWaveChoice = true;
@@ -54,10 +59,89 @@ public class WordGameSpawner : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
-	
-	}
+        checkWave();
+        WordGameController[] characters = FindObjectsOfType<WordGameController>();
+        //Checks all StdOffenseEnemy prefabs currently in the scene and checks
+        //if it's their spawn time, their sprite renderer is off,
+        //and they aren't moving.
+        //If these conditions are met, the sprite renderer is turned on and moving is set to true;
+        foreach (WordGameController character in characters)
+        {
+            if (character.GetComponentInParent<SpriteRenderer>().enabled == false)
+            {
+                if (character.spawnTime == Time.time)
+                {
+                    character.GetComponentInParent<SpriteRenderer>().enabled = true;
+                    if (currentWord.spawnTime != Time.time || currentWord.spawnTime == 0)
+                    {
+                        currentWord.clear();
+                        currentWord.setSpawnTime(character.spawnTime);
+                        currentWord.add(character);
+                        currentWord.setCurrentCharActive(true);
+                        letterStartTime = Time.time;
+                    }
+                    else
+                    {
+                        currentWord.add(character);
+                    }
+                }
+            }
+        }
+        if (currentWord.spawnTime != 0)
+        {
+            if (Time.time - letterStartTime >= currentWord.getCurrentChar().letterDuration && currentWord.currentWordPos < currentWord.getWordListSize()-1)
+            {
+                currentWord.setCurrentCharActive(false);
+                currentWord.currentWordPos++;
+                currentWord.setCurrentCharActive(true);
+            }
+        }
+    }
+
+    //Checks if there is a new wave
+    //If there is, then the proper wave file is set as myFile and the new file
+    //is subsequently parsed
+    void checkWave()
+    {
+        if (currentWave < waveTimes.Length)
+        {
+            if (waveTimes[currentWave] == Time.time)
+            {
+                if (primaryWaveChoice)
+                {
+                    switch (currentWave)
+                    {
+                        case 0:
+                            myFile = wave2FileA;
+                            break;
+                        case 1:
+                            myFile = wave3FileA;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (currentWave)
+                    {
+                        case 0:
+                            myFile = wave2FileB;
+                            break;
+                        case 1:
+                            myFile = wave3FileB;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                currentWave++;
+                parseFile();
+            }
+        }
+    }
 
     //Parses the input file and 
     void parseFile()
@@ -162,4 +246,53 @@ public class WordGameSpawner : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
+}
+
+public class WordContainer
+{
+    List<WordGameController> wordList = new List<WordGameController>();
+    public float spawnTime;
+    public int currentWordPos;
+    
+
+    public WordContainer()
+    {
+        currentWordPos = 0;
+        spawnTime = 0;
+    }
+
+    public void add(WordGameController newChar)
+    {
+        wordList.Add(newChar);
+    }
+
+    public void setSpawnTime(float spawnTime)
+    {
+        this.spawnTime = spawnTime;
+    }
+
+    public WordGameController getCurrentChar()
+    {
+        return wordList[currentWordPos];
+    }
+
+    public void setCurrentCharActive(bool state)
+    {
+        wordList[currentWordPos].currentlyActive = state;
+    }
+
+    public void clear()
+    {
+        foreach(WordGameController character in wordList)
+        {
+            character.destroy();
+        }
+        wordList.Clear();
+    }
+
+    public int getWordListSize()
+    {
+        return wordList.Count;
+    }
+
 }

@@ -13,6 +13,8 @@ public class ScoreTracker : MonoBehaviour
     public int offense_Game_Enemy_Kills = 0;
     public int offense_Game_Civilian_Kills = 0;
 
+    public int wordGameScore = 0;
+
 	// Update is called once per frame
 	void Update ()
     {
@@ -53,6 +55,11 @@ public class ScoreTracker : MonoBehaviour
     public void resetRhythmGameCombo()
     {
         rhythm_Game_Score_Mult = 1;
+    }
+
+    public void updateWordGameScore(int scoreMod)
+    {
+        wordGameScore += scoreMod;
     }
 
 
