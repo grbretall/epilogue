@@ -1,10 +1,20 @@
 fileFormatVersion: 2
 guid: 08ffcb9f7987edc43bef9dd57313eef4
-timeCreated: 1453334035
+timeCreated: 1456458662
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UpArrow: {instanceID: 0}
+  - LeftArrow: {instanceID: 0}
+  - DownArrow: {instanceID: 0}
+  - RightArrow: {instanceID: 0}
+  - myFile: {instanceID: 0}
+  - wave1File: {instanceID: 0}
+  - wave2FileA: {instanceID: 0}
+  - wave2FileB: {instanceID: 0}
+  - wave3FileA: {instanceID: 0}
+  - wave3FileB: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
