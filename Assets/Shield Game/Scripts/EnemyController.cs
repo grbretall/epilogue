@@ -45,6 +45,19 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
+    void OnCollision2D(Collider2D other)
+    {
+        if (other.tag.Equals("Shield"))
+        {
+            GameObject.Destroy(this.gameObject);
+        }
+        else if (other.tag.Equals("Player"))
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateShieldGameScore(1);
+            GameObject.Destroy(this.gameObject);
+        }
+    }
+
     public void Initialize(float speed, float spawnTime,Vector3 startPos)
     {
         this.speed = speed;
