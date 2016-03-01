@@ -19,4 +19,9 @@ public class NonLethalHitController : MonoBehaviour
             GameObject.Destroy(this.gameObject);
         }
 	}
+
+    public void Initialize(Vector3 startPos)
+    {
+        transform.position = startPos;
+    }
 }
