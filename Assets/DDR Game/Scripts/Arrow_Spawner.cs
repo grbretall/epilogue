@@ -13,13 +13,13 @@ public class Arrow_Spawner : MonoBehaviour {
 
     //The destination zone for each arrow
     public Vector3 upArrowDest = new Vector3(-38, 3.5f, 0);
-    public Vector3 leftArrowDest = new Vector3(-38, 1f, 0);
-    public Vector3 downArrowDest = new Vector3(-38, -1, 0);
-    public Vector3 rightArrowDest = new Vector3(-38, -4, 0);
+    public Vector3 leftArrowDest = new Vector3(-38, .5f, 0);
+    public Vector3 downArrowDest = new Vector3(-38, -1f, 0);
+    public Vector3 rightArrowDest = new Vector3(-38, -3.5f, 0);
 
     //The text file that we will parse the level from and the delimiters that we are splitting that text file on (currently space and new line)
     public TextAsset myFile;
-    char[] delimiters = { ' ', '\n' };
+    char[] delimiters = { ' ', '\n', '\t' };
 
     public float[] waveTimes;               //Tracks the times are which various waves are decided
     public int currentWave = 0;             //The current index in the waveTimes array

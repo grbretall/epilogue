@@ -13,7 +13,7 @@ public class OffenseEnemySpawner : MonoBehaviour {
     float topBorder = -11.5f;
 
     public string fileName = "ExampleLevelOff";
-    char[] delimiters = { ' ', '\n' };
+    char[] delimiters = { ' ', '\n', '\t' };
     public TextAsset myFile;
 
     public float[] waveTimes;

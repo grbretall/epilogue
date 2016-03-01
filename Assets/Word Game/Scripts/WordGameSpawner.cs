@@ -35,7 +35,7 @@ public class WordGameSpawner : MonoBehaviour
 
     public Vector3 centerPoint;
     public float characterWidth;
-    char[] delimiters = { ' ', '\n' };
+    char[] delimiters = { ' ', '\n', '\t' };
 
     char[] currentLetterList = new char[1];
 

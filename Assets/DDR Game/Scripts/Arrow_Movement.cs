@@ -27,7 +27,7 @@ public class Arrow_Movement : MonoBehaviour
 
     //Position vector for where each arrow will be heading toward (the miss zone)
     public Vector3 leftArrowDest = new Vector3(-16.5f, 1f, 0);
-    public Vector3 rightArrowDest = new Vector3(-16.5f, -4f, 0);
+    public Vector3 rightArrowDest = new Vector3(-16.5f, -3.5f, 0);
     public Vector3 upArrowDest = new Vector3(-16.5f, 3.5f, 0);
     public Vector3 downArrowDest = new Vector3(-16.5f, -1f, 0);
 
@@ -51,7 +51,7 @@ public class Arrow_Movement : MonoBehaviour
                 destPos = leftArrowDest;
                 break;
             case arrowType.RIGHT:
-                destPos = downArrowDest;
+                destPos = rightArrowDest;
                 break;
             default:
                 break;
@@ -83,25 +83,29 @@ public class Arrow_Movement : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         //Checks for collision in the perfect hit zone
-        if (other.tag.Equals("Perfect_Hit_Zone"))
+        /*if (other.tag.Equals("Perfect_Hit_Zone"))
         {
             if(dir == arrowType.UP && upPressed)
-            {    
+            {
+                Debug.Log("Perfect Hit Up");
                 performHit(3, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
             {
+                Debug.Log("Perfect Hit Left");
                 performHit(3, .04);
             }
             if (dir == arrowType.DOWN && downPressed)
             {
+                Debug.Log("Perfect Hit Down");
                 performHit(3, .04);
             }
             if (dir == arrowType.RIGHT && rightPressed)
             {
+                Debug.Log("Perfect Hit Right");
                 performHit(3, .04);
             }
         }
@@ -110,24 +114,73 @@ public class Arrow_Movement : MonoBehaviour
         {
             if (dir == arrowType.UP && upPressed)
             {
-                //Debug.Log("Near Hit");
+                Debug.Log("Near Hit Up");
                 performHit(2, .04);
             }
             if (dir == arrowType.LEFT && leftPressed)
             {
+                Debug.Log("Near Hit Left");
                 performHit(2, .04);
             }
             if (dir == arrowType.DOWN && downPressed)
             {
+                Debug.Log("Near Hit Down");
                 performHit(2, .04);
             }
             if (dir == arrowType.RIGHT && rightPressed)
             {
+                Debug.Log("Near Hit Right");
+                performHit(2, .04);
+            }
+        }*/
+        if (other.tag.Equals("Perfect_Hit_Zone"))
+        {
+            if (dir == arrowType.UP && getButtonPress() == 1)
+            {
+                Debug.Log("Perfect Hit Up");
+                performHit(3, .04);
+            }
+            if (dir == arrowType.LEFT && getButtonPress() == 2)
+            {
+                Debug.Log("Perfect Hit Left");
+                performHit(3, .04);
+            }
+            if (dir == arrowType.DOWN && getButtonPress() == 3)
+            {
+                Debug.Log("Perfect Hit Down");
+                performHit(3, .04);
+            }
+            if (dir == arrowType.RIGHT && getButtonPress() == 4)
+            {
+                Debug.Log("Perfect Hit Right");
+                performHit(3, .04);
+            }
+        }
+        if (other.tag.Equals("Near_Hit_Zone"))
+        {
+            if (dir == arrowType.UP && getButtonPress() == 1)
+            {
+                Debug.Log("Near Hit Up");
+                performHit(2, .04);
+            }
+            if (dir == arrowType.LEFT && getButtonPress() == 2)
+            {
+                Debug.Log("Near Hit Left");
+                performHit(2, .04);
+            }
+            if (dir == arrowType.DOWN && getButtonPress() == 3)
+            {
+                Debug.Log("Near Hit Down");
+                performHit(2, .04);
+            }
+            if (dir == arrowType.RIGHT && getButtonPress() == 4)
+            {
+                Debug.Log("Near Hit Right");
                 performHit(2, .04);
             }
         }
         //Checks for a miss and resets the combo
-        if(other.tag.Equals("Miss_Zone"))
+        if (other.tag.Equals("Miss_Zone"))
         {
             //Debug.Log("Miss");
             GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().resetRhythmGameCombo();
@@ -165,6 +218,27 @@ public class Arrow_Movement : MonoBehaviour
             rightPressed = true;
             rightPressedTime = Time.time;
         }
+    }
+
+    private int getButtonPress()
+    {
+        if (Input.GetButton("UpArrow"))
+        {
+            return 1;
+        }
+        if (Input.GetButton("LeftArrow"))
+        {
+            return 2;
+        }
+        if (Input.GetButton("DownArrow"))
+        {
+            return 3;
+        }
+        if (Input.GetButton("RightArrow"))
+        {
+            return 4;
+        }
+        return 0;
     }
 
     //Checks if the current arrow key press has expired
