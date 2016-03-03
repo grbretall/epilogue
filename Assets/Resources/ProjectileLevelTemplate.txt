@@ -8,5 +8,5 @@ speed spawnTime startPosition direction
 Speed : Speed is a whole number to determine how fast the projectile will move
 Spawn Time : A decimal number that determines what time in seconds the projectile will spawn
 Start Position : Determines what position on the designated directional border that the projectile 
-				 will start at as a whole number
+				 will start at as a whole number (from -7 to 7)
 Direction : Determines which side that the projectile will spawn on as nyumber between 1 and 4 (1 is UP, 2 is LEFt, 3 is DOWN, and 4 is RIGHT)
