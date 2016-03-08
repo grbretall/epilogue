@@ -9,7 +9,7 @@ public class MouseManager : MonoBehaviour
 
     public Transform nonLethalAttack;       //Stores the prefab for the non-lethal attack radius
     public bool cooldown = false;           //Tells you whether or not you are currently in cooldown for the nonlethal
-    public float cooldownDuration = 2.0f;   //The length of time the cooldown period lasts for
+    public float cooldownDuration = 1.0f;   //The length of time the cooldown period lasts for
     public float cooldownStartTime = 0;     //Tracks what time  a given cooldown period starts
 
 	// Update is called once per frame
@@ -60,6 +60,7 @@ public class MouseManager : MonoBehaviour
         //Checks what happens when the right mouse button is pushed down
         if (Input.GetMouseButtonDown(1))
         {
+            
             Vector3 mouseWorldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mouseWorldPos3D.x, mouseWorldPos3D.y);
             Vector2 dir = Vector2.zero;
@@ -72,7 +73,8 @@ public class MouseManager : MonoBehaviour
                 //  a new prefab is instantiated that serves as the radius of effect for the non-lethal attack
                 if (hit.collider.GetComponent<Rigidbody2D>() != null && hit.collider.tag.Equals("OffenseGameBackground") && !cooldown)
                 {
-                    Instantiate(nonLethalAttack, mouseWorldPos3D, Quaternion.Euler(0, 180, 0));
+                    //Debug.Log("Right Clicked at " + mouseWorldPos3D);
+                    Instantiate(nonLethalAttack).GetComponent<NonLethalHitController>().Initialize(new Vector3(mouseWorldPos3D.x, mouseWorldPos3D.y, 0));
                     cooldown = true;
                     cooldownStartTime = Time.time;
                 }
@@ -98,10 +100,21 @@ public class MouseManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        float newX;
+        float newY;
         if(grabbedObject != null)
         {
             //Checks to see if we currently have an object being grabbed by the mouse then moves the object to where the mouse is
             Vector3 mouseWorldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            /*if (mouseWorldPos3D.x < 1.9)
+                newX = 1.9f;
+            else
+                newX = mouseWorldPos3D.x;
+            if (mouseWorldPos3D.y < 1.9)
+                newY = 1.9f;
+            else
+                newY = mouseWorldPos3D.y;
+            Vector2 mousePos2D = new Vector2(newX, newY);*/
             Vector2 mousePos2D = new Vector2(mouseWorldPos3D.x, mouseWorldPos3D.y);
 
             Vector2 allowedPos2D = mousePos2D - origPos2D;
@@ -109,6 +122,7 @@ public class MouseManager : MonoBehaviour
             allowedPos2D = Vector2.ClampMagnitude(allowedPos2D, 2.0f);
 
             grabbedObject.position = origPos2D + allowedPos2D;
+            //grabbedObject.position = allowedPos2D - origPos2D;
         }
     }
 }

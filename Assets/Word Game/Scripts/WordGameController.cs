@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class WordGameController : MonoBehaviour {
+public class WordGameController : MonoBehaviour
+{
 
     public char letter;       //This is the alphabetical character the current letter represents
     public float spawnTime;     //The time when the letter will spawn
@@ -17,37 +19,47 @@ public class WordGameController : MonoBehaviour {
     int[] correctCode;
     int currentBufferPos = 0;
 
-    /*
-    float bufferStartTime = 0;
-    float bufferTime = 8.0f;
-    */
+    public GameObject morseCodeText;
+    public GameObject resultText;
+    public GameObject currentLetter;
+
+    Text morseCode;
+    Text result;
+    Text displayLetter;
 
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
+        morseCode = morseCodeText.GetComponent<Text>();
+        result = resultText.GetComponent<Text>();
+        displayLetter = currentLetter.GetComponent<Text>();
+        
         GetComponentInParent<SpriteRenderer>().enabled = false;
         determineCorrectCode();
-        for(int i = 0; i < morseCodeBuffer.Length; i++)
+        for (int i = 0; i < morseCodeBuffer.Length; i++)
         {
             morseCodeBuffer[i] = 0;
         }
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        Debug.Log(letter.ToString().ToUpper());
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-	    
-	}
+
+    }
 
     void FixedUpdate()
     {
         if (currentlyActive)
         {
             if (bufferFull())
-            { 
+            {
                 if (checkBuffer())
                 {
+                    GameObject.FindGameObjectWithTag("Morse_Code_Result_Text").GetComponent<Text>().text = "Letter Completed";
+                    //result.text = "Letter Completed";
                     Debug.Log("You did it!");
                     currentlyActive = false;
                     GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateWordGameScore(1);
@@ -65,32 +77,39 @@ public class WordGameController : MonoBehaviour {
                 {
                     morseCodeBuffer[currentBufferPos] = 1;
                     currentBufferPos++;
+                    GameObject.FindGameObjectWithTag("Morse_Code_Result_Text").GetComponent<Text>().text = "Short";
+                    //result.text = "Short ";
                     Debug.Log("Short Command");
                 }
                 else if (currentBufferPos < morseCodeBuffer.Length)
                 {
                     morseCodeBuffer[currentBufferPos] = 2;
                     currentBufferPos++;
+                    GameObject.FindGameObjectWithTag("Morse_Code_Result_Text").GetComponent<Text>().text = "Long";
+                    //result.text = "Long ";
                     Debug.Log("Long Command");
                 }
                 keyHeld = false;
             }
-            if(Input.GetButton("RefreshBuffer") || bufferFull())
+            if (Input.GetButton("RefreshBuffer") || bufferFull())
             {
-				if (checkBuffer())
+                if (checkBuffer())
                 {
                     Debug.Log("You did it!");
+                    //result.text = "Letter Completed";
+                    GameObject.FindGameObjectWithTag("Morse_Code_Result_Text").GetComponent<Text>().text = "Letter Completed";
                     currentlyActive = false;
                     GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreTracker>().updateWordGameScore(1);
-					return;
+                    return;
                 }
-                    for (int i = 0; i < morseCodeBuffer.Length; i++)
-                    {
-                        morseCodeBuffer[i] = 0;
-                    }
-                    currentBufferPos = 0;
-                    Debug.Log(morseCodeBuffer.Length);
-                    Debug.Log("Buffer Cleared");
+                for (int i = 0; i < morseCodeBuffer.Length; i++)
+                {
+                    morseCodeBuffer[i] = 0;
+                }
+                currentBufferPos = 0;
+                //Debug.Log(morseCodeBuffer.Length);
+                Debug.Log("Buffer Cleared");
+                result.text = "Buffer Cleared";
             }
         }
     }
@@ -107,7 +126,7 @@ public class WordGameController : MonoBehaviour {
     //Sets the array for the correct morse code for this letter
     public void determineCorrectCode()
     {
-        switch(letter)
+        switch (letter)
         {
             case 'a':
                 bufferSize = 2;
@@ -328,7 +347,7 @@ public class WordGameController : MonoBehaviour {
     //code for this letter to see if they are equivalent
     public bool checkBuffer()
     {
-        for(int i = 0; i < morseCodeBuffer.Length; i++)
+        for (int i = 0; i < morseCodeBuffer.Length; i++)
         {
             if (morseCodeBuffer[i] != correctCode[i])
                 return false;
@@ -343,11 +362,45 @@ public class WordGameController : MonoBehaviour {
 
     public bool bufferFull()
     {
-        for(int i = 0; i < morseCodeBuffer.Length; i++)
+        for (int i = 0; i < morseCodeBuffer.Length; i++)
         {
             if (morseCodeBuffer[i] == 0)
                 return false;
         }
         return true;
+    }
+
+    public void initializeUI()
+    {
+
+        GameObject.FindGameObjectWithTag("Current_Letter_Text").GetComponent<Text>().text = letter.ToString().ToUpper();
+        string currentMorseCode = "";
+        for (int i = 0; i < correctCode.Length; i++)
+        {
+            if (i == 0)
+            {
+                if (correctCode[i] == 1)
+                {
+                    currentMorseCode += "Short";
+                }
+                else if (correctCode[i] == 2)
+                {
+                    currentMorseCode += "Long";
+                }
+            }
+            else
+            {
+                if (correctCode[i] == 1)
+                {
+                    currentMorseCode += " Short";
+                }
+                else if (correctCode[i] == 2)
+                {
+                    currentMorseCode += " Long";
+                }
+            }
+        }
+        Debug.Log(currentMorseCode);
+        GameObject.FindGameObjectWithTag("Current_Morse_Code_Text").GetComponent<Text>().text = currentMorseCode;
     }
 }

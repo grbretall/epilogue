@@ -82,7 +82,7 @@ public class StdOffenseEnemy : MonoBehaviour
     //with a nonlethal attack prefab, then the enemy
     //will take damage and get its nonlethal flag set
     //to true
-    public void onTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag.Equals("NonLethalAttack") && !resistant)
         {
@@ -123,6 +123,6 @@ public class StdOffenseEnemy : MonoBehaviour
                 }
             }
         }
-        GameObject.Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }

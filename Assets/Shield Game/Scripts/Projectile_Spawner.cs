@@ -13,7 +13,7 @@ public class Projectile_Spawner : MonoBehaviour
     public Transform Projectile6;
 
     public string fileName = "ExampleLevelProj";
-    char[] delimiters = { ' ', '\n' };
+    char[] delimiters = { ' ', '\n', '\t' };
     public TextAsset myFile;
 
     public float[] waveTimes;               //Tracks the times are which various waves are decided
