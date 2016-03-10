@@ -66,7 +66,8 @@ public class WordGameSpawner : MonoBehaviour
         //Checks all StdOffenseEnemy prefabs currently in the scene and checks
         //if it's their spawn time, their sprite renderer is off,
         //and they aren't moving.
-        //If these conditions are met, the sprite renderer is turned on and moving is set to true;
+        //If these conditions are met, the sprite renderer is turned on and active is set to true
+        //All of the chars in the word are also added to the current word object
         foreach (WordGameController character in characters)
         {
             if (character.GetComponentInParent<SpriteRenderer>().enabled == false)
@@ -279,6 +280,7 @@ public class WordContainer
 
     public void setCurrentCharActive(bool state)
     {
+        wordList[currentWordPos].initializeUI();
         wordList[currentWordPos].currentlyActive = state;
     }
 
