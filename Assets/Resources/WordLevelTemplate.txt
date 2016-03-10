@@ -1,0 +1,10 @@
+Word Game Level File Template
+==============================
+The format for the word game is as follows:
+
+Word SpawnTime LetterDuration
+
+==============================
+Word : the word is a string that will be the word that is displayed on the screen
+Spawn Time : The time that the word will spawn at
+Letter Duration : The amount of time in seconds that an individual letter will stay active for
