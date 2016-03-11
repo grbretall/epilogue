@@ -1,0 +1,7 @@
+watch	1	5
+danger	30	4
+fear	60	5
+panic	90	5
+hope	120	5
+yes	150	10
+no	180	10
