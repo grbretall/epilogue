@@ -1,0 +1,58 @@
+Word Game Level File Template
+==============================
+The format for the word game is as follows:
+
+Word SpawnTime LetterDuration
+
+==============================
+Word : the word is a string that will be the word that is displayed on the screen
+Spawn Time : The time that the word will spawn at
+Letter Duration : The amount of time in seconds that an individual letter will stay active for
+
+
+======================================
+Offense Game Level File Template
+======================================
+The format for the offense game is as follows:
+
+speed spawnTime damage health civilian resistant startPosition route1 route2 route3 route4 route5 route6 route7 route8 route9 route10 spriteNum
+
+======================================
+Speed : Speed is a whole number to determine how fast the enemy will move
+Spawn Time : The time at which this enemy will spawn in seconds (decimals supported)
+Damage : A whole number for how much damage the enemy will deal when it reaches the end zone
+Health : A whole number for how much damage this enemy must receive before it is destroyed
+Civilian : Marks whether or not this particular enemy is a civilian or not.  1 indicates civilian, 0 is not.
+Resistant : Marks if an enemy is resistant to non-lethal damage or not.  1 indicates resistant, 0 indicates 0 not resistant.
+Start Position : The position on the top border that the enemy will spawn. Should be a whole number between -9 and 9
+Routes 1-10 : These are the different nodes that the enemy will travel between.  Nodes are in rows of 10, from left to right
+			  starting at 0.  Any nodes in the 10 node route are not used should be set to 50, as well as one node being preserved at the end as 50.
+Sprite Num : The number of sprite to load in to use for that particular enemy.
+
+
+======================================
+Projectile Game Level File Template
+=======================================
+The format for the projectile game is as follows:
+
+speed spawnTime startPosition direction
+
+=======================================
+Speed : Speed is a whole number to determine how fast the projectile will move
+Spawn Time : A decimal number that determines what time in seconds the projectile will spawn
+Start Position : Determines what position on the designated directional border that the projectile 
+				 will start at as a whole number (from -7 to 7)
+Direction : Determines which side that the projectile will spawn on as nyumber between 1 and 4 (1 is UP, 2 is LEFt, 3 is DOWN, and 4 is RIGHT)
+
+
+======================================
+Rhythm Game Level File Template
+==================================================
+The format for the rhythm game is as follows:
+
+Speed SpawnTime Direction
+
+==================================================
+Speed : a whole number that will determine speed (the parser doesn't like decimals)
+Spawn Time : the time in seconds the prefab will spawn at, decimals seem to work here for whatever reason
+Direction : a number between 1 and 4 to determine direction (1 is UP, 2 is LEFT, 3 is DOWN, and 4 is RIGHT )
